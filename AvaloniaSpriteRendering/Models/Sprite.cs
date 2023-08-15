@@ -118,7 +118,6 @@ namespace AvaloniaSpriteRendering.Models
 			List<RelativeRect> frames = new List<RelativeRect>();
 
 			Bitmap sheet = this._spriteSheet;
-			//RelativeRect rect = new RelativeRect(0, 0, this._frameWidth, this._frameHeight, RelativeUnit.Relative);
 			if ((sheet.PixelSize.Height % this._frameHeight) == 0 && (sheet.PixelSize.Width % this._frameWidth) == 0)
 			{
 				int rows = (int)sheet.PixelSize.Height / (int)this._frameHeight;
@@ -132,12 +131,6 @@ namespace AvaloniaSpriteRendering.Models
 						{
 							int currentY = yOffset + row * this._frameHeight;
 							int currentX = xOffset + col * this._frameWidth;
-							//cropRect.X = currentX;
-							//cropRect.Y = currentY;
-							//cropRect = new PixelRect(currentX, currentY, this._frameWidth, this._frameHeight);
-							
-							//derp.Destingation
-							//frame = new CroppedBitmap(sheet, cropRect);
 							frames.Add(new RelativeRect(currentX, currentY, this._frameWidth, this._frameHeight, RelativeUnit.Absolute));
 
 							frameCount++;
