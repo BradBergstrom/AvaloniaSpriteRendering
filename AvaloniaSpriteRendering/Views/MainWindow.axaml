@@ -64,11 +64,13 @@
         <Border BorderBrush="Black" BorderThickness="1" Height="64" Width="64" Margin="5" Padding="0">
           <Rectangle x:Name="spriteRectangle64"  Width="64" Height="64"/>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" Height="128" Width="128" Margin="5" Padding="0">
+        <Border x:Name="bigMan" BorderBrush="Black" BorderThickness="1" Height="128" Width="128" Margin="5" Padding="0">
           <Rectangle x:Name="spriteRectangle128"  Stretch="None" Width="128" Height="128"  />
         </Border>
       </StackPanel>
-      <Label Content="{Binding SpriteStatus}" HorizontalAlignment="Center" Height="32" FontFamily="Open Sans" FontSize="15"/>
+      <StackPanel x:Name="bunchOfDudes" Orientation = "Horizontal"  HorizontalAlignment="Center" Margin="5,5,0,0">
+      </StackPanel>
+        <Label Content="{Binding SpriteStatus}" HorizontalAlignment="Center" Height="32" FontFamily="Open Sans" FontSize="15"/>
       <!--<Button Width="115" Height="32" Content="Load Sprites" FontFamily="Open Sans" FontSize="15" Command="{Binding loadSpriteButtonClicked}"/>-->
 
     </StackPanel> 
