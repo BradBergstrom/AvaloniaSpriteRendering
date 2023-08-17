@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="using:AvaloniaSpriteRendering.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
         x:Class="AvaloniaSpriteRendering.Views.MainWindow"
         Icon="/Assets/avalonia-logo.ico"
         SizeToContent="WidthAndHeight"
@@ -70,6 +70,9 @@
       </StackPanel>
       <Label Content="{Binding SpriteStatus}" HorizontalAlignment="Center" Height="32" FontFamily="Open Sans" FontSize="15"/>
       <!--<Button Width="115" Height="32" Content="Load Sprites" FontFamily="Open Sans" FontSize="15" Command="{Binding loadSpriteButtonClicked}"/>-->
+      <Border BorderBrush="Black" BorderThickness="1" Height="320" Width="320" Margin="5" Padding="0">
+        <Canvas x:Name="gridCanvas" Height="320" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="320"  />
+      </Border>
 
     </StackPanel> 
 
