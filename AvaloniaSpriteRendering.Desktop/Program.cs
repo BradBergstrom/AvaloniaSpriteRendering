@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Avalonia;
 using Avalonia.Logging;
 using Serilog;
@@ -16,7 +17,10 @@ class Program
 		try
 		{
 			// prepare and run your App here
-			BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+			BuildAvaloniaApp().With(new Win32PlatformOptions
+			{
+				RenderingMode = new List<Win32RenderingMode> { Win32RenderingMode.Software }
+			}).StartWithClassicDesktopLifetime(args);
 		}
 		catch (Exception e)
 		{

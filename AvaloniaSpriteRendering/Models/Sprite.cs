@@ -7,6 +7,7 @@ using Avalonia;
 using Serilog;
 using Avalonia.Animation;
 using Avalonia.Controls;
+using System.ComponentModel;
 
 namespace AvaloniaSpriteRendering.Models
 {
@@ -37,7 +38,6 @@ namespace AvaloniaSpriteRendering.Models
 
 		int _animIndex = 0;
 
-
 		/// <summary>
 		/// Create new sprite
 		/// </summary>
@@ -56,7 +56,7 @@ namespace AvaloniaSpriteRendering.Models
 
 			this._currentFrame = new ImageBrush(spriteSheet);
 			this._currentFrame.SourceRect = this._spriteFrames[0];
-
+			this._currentFrame.Opacity = 1;
 
 			AnimationTimer.Tick += (sender, e) => nextFrame();
 		}
