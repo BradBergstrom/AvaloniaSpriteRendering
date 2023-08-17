@@ -52,8 +52,8 @@ public partial class MainViewModel : ObservableObject
 			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
 
 			Sprite unitSprite = new Sprite(scaledSheet, 4, frameSize * scale, frameSize * scale);
-			rect.Fill = unitSprite.Brush;
-			unitSprite.StartAnimation();
+			//rect.Fill = unitSprite.Brush;
+			//unitSprite.StartAnimation();
 			return unitSprite;
 		}
 		catch (Exception e)

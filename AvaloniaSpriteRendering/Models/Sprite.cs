@@ -12,15 +12,28 @@ namespace AvaloniaSpriteRendering.Models
 {
 	public class Sprite
 	{
+		private static readonly int _frameDuration = 200;
+		private static DispatcherTimer _animationTimer;
+		public static DispatcherTimer AnimationTimer
+		{
+			get
+			{
+				if (_animationTimer == null)
+				{
+					_animationTimer = new DispatcherTimer();
+					_animationTimer.Interval = TimeSpan.FromMilliseconds(_frameDuration);
+					_animationTimer.Start();
+				}
+				return _animationTimer;
+			}
+		}
 		Bitmap _spriteSheet;
-		public ImageBrush _currentFrame;
-		List<RelativeRect> _spriteFrames;
+		Image _currentFrame;
+		List<CroppedBitmap> _spriteFrames;
 		int _numFrames;
 		int _frameWidth;
 		int _frameHeight;
 
-		DispatcherTimer _animTimer;
-		int _frameDuration = 200;
 		int _animIndex = 0;
 
 
@@ -33,6 +46,10 @@ namespace AvaloniaSpriteRendering.Models
 		/// <param name="frameHeight">Height of each frame in pixels</param>
 		public Sprite(Bitmap spriteSheet, int frames, int frameWidth, int frameHeight)
 		{
+			_currentFrame = new Image();
+			_currentFrame.Width = frameWidth;
+			_currentFrame.Height = frameHeight;
+
 			this._spriteSheet = spriteSheet;
 			this._numFrames = frames;
 			this._frameWidth = frameWidth;
@@ -40,32 +57,29 @@ namespace AvaloniaSpriteRendering.Models
 
 			this._spriteFrames = cutSheet();
 
-			this._currentFrame = new ImageBrush(spriteSheet);
-			this._currentFrame.SourceRect = this._spriteFrames[0];
-
-			this._animTimer = new DispatcherTimer();
-			this._animTimer.Tick += (sender, e) => nextFrame();
+			//this._currentFrame = this._spriteFrames[0];
+			SetFrame(0);
+			AnimationTimer.Tick += (sender, e) => nextFrame();
 		}
 
-		public ImageBrush Brush
+		public Image Brush
 		{
 			get { return this._currentFrame; }
 		}
 
 		public DispatcherTimer Timer
 		{
-			get { return this._animTimer; }
+			get { return AnimationTimer; }
 		}
 
-		public List<RelativeRect> Frames
+		public List<CroppedBitmap> Frames
 		{
 			get { return this._spriteFrames; }
 		}
 
 		public int FrameDuration
 		{
-			get { return this._frameDuration; }
-			set { this._frameDuration = value; }
+			get { return _frameDuration; }
 		}
 
 		/// <summary>
@@ -74,27 +88,16 @@ namespace AvaloniaSpriteRendering.Models
 		/// <param name="index">Frame index</param>
 		public void SetFrame(int index)
 		{
-			this._currentFrame.SourceRect = this._spriteFrames[index];
+			this._currentFrame.Source = this._spriteFrames[index];
 		}
 
-		/// <summary>
-		/// Start sprite animation.
-		/// </summary>
-		public void StartAnimation()
-		{
-			this._animTimer.Interval = TimeSpan.FromMilliseconds(this._frameDuration);
-			this._animTimer.Start();
-		}
 
 		/// <summary>
 		/// Pause running sprite animation
 		/// </summary>
 		public void PauseAnimation()
 		{
-			if (this._animTimer != null)
-			{
-				this._animTimer.Stop();
-			}
+			AnimationTimer.Stop();
 		}
 
 		/// <summary>
@@ -104,18 +107,19 @@ namespace AvaloniaSpriteRendering.Models
 		{
 			this._animIndex++;
 			this._animIndex = this._animIndex % this._spriteFrames.Count;
-			this._currentFrame.SourceRect = this._spriteFrames[this._animIndex];
+			this._currentFrame.Source = this._spriteFrames[this._animIndex];
 		}
 
 		/// <summary>
 		/// Cut spritesheet into bitmap animation frames
 		/// </summary>
 		/// <returns>Returns a list of animation frames</returns>
-		private List<RelativeRect> cutSheet()
+		private List<CroppedBitmap> cutSheet()
 		{
 			int xOffset = 0;
 			int yOffset = 0;
-			List<RelativeRect> frames = new List<RelativeRect>();
+			PixelRect cropRect = new PixelRect(0, 0, this._frameWidth, this._frameHeight);
+			List<CroppedBitmap> frames = new List<CroppedBitmap>();
 
 			Bitmap sheet = this._spriteSheet;
 			if ((sheet.PixelSize.Height % this._frameHeight) == 0 && (sheet.PixelSize.Width % this._frameWidth) == 0)
@@ -131,7 +135,9 @@ namespace AvaloniaSpriteRendering.Models
 						{
 							int currentY = yOffset + row * this._frameHeight;
 							int currentX = xOffset + col * this._frameWidth;
-							frames.Add(new RelativeRect(currentX, currentY, this._frameWidth, this._frameHeight, RelativeUnit.Absolute));
+							cropRect = new PixelRect(currentX, currentY, this._frameWidth, this._frameHeight);
+
+							frames.Add(new CroppedBitmap(sheet, cropRect));
 
 							frameCount++;
 							if (frameCount == this._numFrames) { break; }
