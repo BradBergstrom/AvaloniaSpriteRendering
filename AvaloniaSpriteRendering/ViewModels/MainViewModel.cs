@@ -53,7 +53,7 @@ public partial class MainViewModel : ObservableObject
 
 			Sprite unitSprite = new Sprite(scaledSheet, 4, frameSize * scale, frameSize * scale);
 			rect.Fill = unitSprite.Brush;
-			unitSprite.StartAnimation();
+			//unitSprite.StartAnimation();
 			return unitSprite;
 		}
 		catch (Exception e)

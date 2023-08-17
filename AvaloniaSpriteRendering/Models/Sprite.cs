@@ -12,6 +12,22 @@ namespace AvaloniaSpriteRendering.Models
 {
 	public class Sprite
 	{
+		private static readonly int _frameDuration = 200;
+		private static DispatcherTimer _animationTimer;
+		public static DispatcherTimer AnimationTimer
+		{
+			get
+			{
+				if(_animationTimer == null)
+				{
+					_animationTimer = new DispatcherTimer();
+					_animationTimer.Interval = TimeSpan.FromMilliseconds(_frameDuration);
+					_animationTimer.Start();
+				}
+				return _animationTimer;
+			}
+		}
+
 		Bitmap _spriteSheet;
 		public ImageBrush _currentFrame;
 		List<RelativeRect> _spriteFrames;
@@ -19,8 +35,6 @@ namespace AvaloniaSpriteRendering.Models
 		int _frameWidth;
 		int _frameHeight;
 
-		DispatcherTimer _animTimer;
-		int _frameDuration = 200;
 		int _animIndex = 0;
 
 
@@ -43,8 +57,8 @@ namespace AvaloniaSpriteRendering.Models
 			this._currentFrame = new ImageBrush(spriteSheet);
 			this._currentFrame.SourceRect = this._spriteFrames[0];
 
-			this._animTimer = new DispatcherTimer();
-			this._animTimer.Tick += (sender, e) => nextFrame();
+
+			AnimationTimer.Tick += (sender, e) => nextFrame();
 		}
 
 		public ImageBrush Brush
@@ -52,20 +66,9 @@ namespace AvaloniaSpriteRendering.Models
 			get { return this._currentFrame; }
 		}
 
-		public DispatcherTimer Timer
-		{
-			get { return this._animTimer; }
-		}
-
 		public List<RelativeRect> Frames
 		{
 			get { return this._spriteFrames; }
-		}
-
-		public int FrameDuration
-		{
-			get { return this._frameDuration; }
-			set { this._frameDuration = value; }
 		}
 
 		/// <summary>
@@ -78,23 +81,11 @@ namespace AvaloniaSpriteRendering.Models
 		}
 
 		/// <summary>
-		/// Start sprite animation.
-		/// </summary>
-		public void StartAnimation()
-		{
-			this._animTimer.Interval = TimeSpan.FromMilliseconds(this._frameDuration);
-			this._animTimer.Start();
-		}
-
-		/// <summary>
 		/// Pause running sprite animation
 		/// </summary>
 		public void PauseAnimation()
 		{
-			if (this._animTimer != null)
-			{
-				this._animTimer.Stop();
-			}
+			AnimationTimer.Stop();
 		}
 
 		/// <summary>
