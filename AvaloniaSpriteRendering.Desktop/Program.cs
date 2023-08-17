@@ -38,7 +38,6 @@ class Program
 		   .MinimumLevel.Information()
 		   .WriteTo.Console()
 		   .WriteTo.File("serilog.txt",
-			   rollingInterval: RollingInterval.Month,
 			   rollOnFileSizeLimit: true)
 		   .CreateLogger();
 
