@@ -1,6 +1,9 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using AvaloniaSpriteRendering.Models;
 using AvaloniaSpriteRendering.ViewModels;
+using System;
 using System.Collections.Generic;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -25,6 +28,12 @@ public partial class MainWindow : Window
 			bunchOfDudes.Children.Add(row);
 			makeTenSprites(viewModel, row);
 		}
+	}
+	private void loadSpriteSheet()
+	{
+		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
+		SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+
 	}
 	private void makeTenSprites(MainViewModel viewModel, StackPanel stack)
 	{

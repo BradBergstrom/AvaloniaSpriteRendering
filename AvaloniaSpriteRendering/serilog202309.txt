@@ -1,0 +1,1 @@
+2023-09-01 15:04:06.667 -07:00 [INF] Starting up Avalonia application!
