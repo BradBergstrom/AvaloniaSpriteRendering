@@ -48,7 +48,7 @@ public partial class MainViewModel : ObservableObject
 	{
 		try
 		{
-			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
+			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
 			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
 
 			Sprite unitSprite = new Sprite(scaledSheet, 4, frameSize * scale, frameSize * scale);
