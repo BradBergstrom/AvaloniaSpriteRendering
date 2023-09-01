@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Avalonia;
 using Avalonia.Logging;
 using Serilog;
@@ -41,7 +42,7 @@ class Program
 		Log.Logger = new LoggerConfiguration()
 		   .MinimumLevel.Information()
 		   .WriteTo.Console()
-		   .WriteTo.File("serilog.txt",
+		   .WriteTo.File("." + Path.DirectorySeparatorChar + "Logs" + Path.DirectorySeparatorChar + "serilog.log",
 			   rollOnFileSizeLimit: true)
 		   .CreateLogger();
 
