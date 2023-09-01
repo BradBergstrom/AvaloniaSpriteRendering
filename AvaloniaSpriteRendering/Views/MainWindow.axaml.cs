@@ -33,16 +33,16 @@ public partial class MainWindow : Window
 	{
 		int rows = 32;
 		int cols = 48;
-		int widthHeight = 64;
+		int widthHeight = 32;
 		int xStep = 0;
 		int yStep = 0;
+		Sprite sprite = viewModel.loadSpriteSheet(spriteRectangle, 32, widthHeight / 32); //62mb
 
-		for(int i = 0; i < cols; i++)
+		for (int i = 0; i < cols; i++)
 		{
 			for (int j = 0; j < rows; j++)
 			{
 				Avalonia.Controls.Shapes.Rectangle rectangle = new Avalonia.Controls.Shapes.Rectangle();
-				Sprite sprite = viewModel.loadSpriteSheet(spriteRectangle, 32, widthHeight/32);
 				rectangle.Fill = sprite.Brush;
 				rectangle.Width = widthHeight;
 				rectangle.Height = widthHeight;
