@@ -27,7 +27,9 @@ public partial class MainWindow : Window
 		StackPanel rowTest = new StackPanel();
 		rowTest.Orientation = Avalonia.Layout.Orientation.Horizontal;
 		bunchOfDudes.Children.Add(rowTest);
-		makeMapCanvas(gridCanvas, gridBorder);
+
+		makeSpriteCanvas(gridCanvas, gridBorder);
+		//makeMapCanvas(gridCanvas, gridBorder);
 
 		return;
 		for (int i = 0; i < 48; i++)
@@ -47,17 +49,56 @@ public partial class MainWindow : Window
 		int yStep = 0;
 		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
 		//Bitmap tileSheetSourceZoom = tileSheetSource.CreateScaledBitmap(new PixelSize(64, 64), BitmapInterpolationMode.None);
-		SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+		//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
 
 		for (int i = 0; i < cols; i++)
 		{
 			for (int j = 0; j < rows; j++)
 			{
 				Avalonia.Controls.Image copy = new Avalonia.Controls.Image();
+				SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+
 				copy.Width = 32;
 				copy.Height = 32;
 				copy.Source = tileSheet.GetTile(34);
 								
+				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
+				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
+				canvas.Children.Add(copy);
+				xStep++;
+			}
+			xStep = 0;
+			yStep++;
+		}
+		canvas.Width = rows * widthHeight;
+		canvas.Height = cols * widthHeight;
+		border.Width = rows * widthHeight;
+		border.Height = cols * widthHeight;
+		//result= 20mb
+
+	}
+	private void makeSpriteCanvas(Canvas canvas, Border border)
+	{
+		int rows = 32;
+		int cols = 48;
+		int widthHeight = 32;
+		int xStep = 0;
+		int yStep = 0;
+		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
+		//Bitmap tileSheetSourceZoom = tileSheetSource.CreateScaledBitmap(new PixelSize(64, 64), BitmapInterpolationMode.None);
+		//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+
+		for (int i = 0; i < cols; i++)
+		{
+			for (int j = 0; j < rows; j++)
+			{
+				Avalonia.Controls.Image copy = new Avalonia.Controls.Image();
+				Sprite tileSheet = new Sprite(tileSheetSource,4, 32, 32);
+
+				copy.Width = 32;
+				copy.Height = 32;
+				copy = tileSheet.Brush;
+
 				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
 				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
 				canvas.Children.Add(copy);
