@@ -7,6 +7,7 @@ using Avalonia;
 using Serilog;
 using Avalonia.Animation;
 using Avalonia.Controls;
+using System.ComponentModel;
 
 namespace AvaloniaSpriteRendering.Models
 {
@@ -27,15 +28,15 @@ namespace AvaloniaSpriteRendering.Models
 				return _animationTimer;
 			}
 		}
+
 		Bitmap _spriteSheet;
-		Image _currentFrame;
-		List<CroppedBitmap> _spriteFrames;
+		public ImageBrush _currentFrame;
+		List<RelativeRect> _spriteFrames;
 		int _numFrames;
 		int _frameWidth;
 		int _frameHeight;
 
 		int _animIndex = 0;
-
 
 		/// <summary>
 		/// Create new sprite
@@ -46,10 +47,6 @@ namespace AvaloniaSpriteRendering.Models
 		/// <param name="frameHeight">Height of each frame in pixels</param>
 		public Sprite(Bitmap spriteSheet, int frames, int frameWidth, int frameHeight)
 		{
-			_currentFrame = new Image();
-			_currentFrame.Width = frameWidth;
-			_currentFrame.Height = frameHeight;
-
 			this._spriteSheet = spriteSheet;
 			this._numFrames = frames;
 			this._frameWidth = frameWidth;
@@ -57,29 +54,21 @@ namespace AvaloniaSpriteRendering.Models
 
 			this._spriteFrames = cutSheet();
 
-			//this._currentFrame = this._spriteFrames[0];
-			SetFrame(0);
+			this._currentFrame = new ImageBrush(spriteSheet);
+			this._currentFrame.SourceRect = this._spriteFrames[0];
+			this._currentFrame.Opacity = 1;
+
 			AnimationTimer.Tick += (sender, e) => nextFrame();
 		}
 
-		public Image Brush
+		public ImageBrush Brush
 		{
 			get { return this._currentFrame; }
 		}
 
-		public DispatcherTimer Timer
-		{
-			get { return AnimationTimer; }
-		}
-
-		public List<CroppedBitmap> Frames
+		public List<RelativeRect> Frames
 		{
 			get { return this._spriteFrames; }
-		}
-
-		public int FrameDuration
-		{
-			get { return _frameDuration; }
 		}
 
 		/// <summary>
@@ -88,9 +77,8 @@ namespace AvaloniaSpriteRendering.Models
 		/// <param name="index">Frame index</param>
 		public void SetFrame(int index)
 		{
-			this._currentFrame.Source = this._spriteFrames[index];
+			this._currentFrame.SourceRect = this._spriteFrames[index];
 		}
-
 
 		/// <summary>
 		/// Pause running sprite animation
@@ -107,19 +95,18 @@ namespace AvaloniaSpriteRendering.Models
 		{
 			this._animIndex++;
 			this._animIndex = this._animIndex % this._spriteFrames.Count;
-			this._currentFrame.Source = this._spriteFrames[this._animIndex];
+			this._currentFrame.SourceRect = this._spriteFrames[this._animIndex];
 		}
 
 		/// <summary>
 		/// Cut spritesheet into bitmap animation frames
 		/// </summary>
 		/// <returns>Returns a list of animation frames</returns>
-		private List<CroppedBitmap> cutSheet()
+		private List<RelativeRect> cutSheet()
 		{
 			int xOffset = 0;
 			int yOffset = 0;
-			PixelRect cropRect = new PixelRect(0, 0, this._frameWidth, this._frameHeight);
-			List<CroppedBitmap> frames = new List<CroppedBitmap>();
+			List<RelativeRect> frames = new List<RelativeRect>();
 
 			Bitmap sheet = this._spriteSheet;
 			if ((sheet.PixelSize.Height % this._frameHeight) == 0 && (sheet.PixelSize.Width % this._frameWidth) == 0)
@@ -135,9 +122,7 @@ namespace AvaloniaSpriteRendering.Models
 						{
 							int currentY = yOffset + row * this._frameHeight;
 							int currentX = xOffset + col * this._frameWidth;
-							cropRect = new PixelRect(currentX, currentY, this._frameWidth, this._frameHeight);
-
-							frames.Add(new CroppedBitmap(sheet, cropRect));
+							frames.Add(new RelativeRect(currentX, currentY, this._frameWidth, this._frameHeight, RelativeUnit.Absolute));
 
 							frameCount++;
 							if (frameCount == this._numFrames) { break; }
