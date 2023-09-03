@@ -44,27 +44,7 @@ public partial class MainViewModel : ObservableObject
 		}
 
 	}
-	public void loadSpriteSheet(Rectangle rect, int frameSize)
-	{
-		try
-		{
-			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
-			//Code to fill rectangle by hand:
-			//ImageBrush brush = new ImageBrush(spriteSheet);
-			//brush.SourceRect = new RelativeRect(0, 0, 32, 32, RelativeUnit.Absolute);
-			//brush.DestinationRect = new RelativeRect(0, 0, 32, 32, RelativeUnit.Relative);
-			//rect.Fill = brush;
-
-			Sprite unitSprite = new Sprite(spriteSheet, 4, frameSize, frameSize);
-			rect.Fill = unitSprite.Brush;
-			unitSprite.StartAnimation();
-		}
-		catch (Exception e)
-		{
-			Log.Fatal(e, "Exception caught in MainViewModel.loadSpriteSheet");
-		}
-	}
-	public void loadSpriteSheetScaled(Rectangle rect, int frameSize, int scale)
+	public Sprite loadSpriteSheet(Rectangle rect, int frameSize, int scale =1 )
 	{
 		try
 		{
@@ -72,13 +52,15 @@ public partial class MainViewModel : ObservableObject
 			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
 
 			Sprite unitSprite = new Sprite(scaledSheet, 4, frameSize * scale, frameSize * scale);
-			rect.Fill = unitSprite.Brush;
-			unitSprite.StartAnimation();
+			//rect.Fill = unitSprite.Brush;
+			//unitSprite.StartAnimation();
+			return unitSprite;
 		}
 		catch (Exception e)
 		{
 			Log.Fatal(e, "Exception caught in MainViewModel.loadSpriteSheet");
 		}
+		return null;
 	}
 	public void loadSpriteButtonClicked()
 	{
