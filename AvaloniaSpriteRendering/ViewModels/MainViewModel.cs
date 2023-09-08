@@ -99,4 +99,40 @@ public partial class MainViewModel : ObservableObject
 		border.Width = rows * widthHeight + 2;
 		border.Height = cols * widthHeight + 2;
 	}
+	public void populateSpriteCanvasWithAnimations(Canvas canvas, Border border)
+	{
+		int rows = 10;
+		int cols = 10;
+		int widthHeight = 32;
+		int xStep = 0;
+		int yStep = 0;
+		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
+		Sprite unitSprite = new Sprite(tileSheetSource, 4, 32, 32);
+		Random rnd = new Random();
+
+		for (int i = 0; i < cols; i++)
+		{
+			for (int j = 0; j < rows; j++)
+			{
+				Rectangle copy = new Rectangle();
+				//Stress test by loading the entire spritesheet into memory for each tile.
+				//Sprite unitSprite = new Sprite(tileSheetSource, 4, 32, 32);
+
+				copy.Width = 32;
+				copy.Height = 32;
+				copy.Fill = unitSprite.Brush;
+
+				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
+				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
+				canvas.Children.Add(copy);
+				xStep++;
+			}
+			xStep = 0;
+			yStep++;
+		}
+		canvas.Width = rows * widthHeight;
+		canvas.Height = cols * widthHeight;
+		border.Width = rows * widthHeight + 2;
+		border.Height = cols * widthHeight + 2;
+	}
 }

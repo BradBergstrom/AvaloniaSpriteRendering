@@ -30,6 +30,7 @@ public partial class MainWindow : Window
 
 		//load the sprite sheet
 		viewModel.populateSpriteCanvas(gridCanvas, gridBorder);
+		//viewModel.populateSpriteCanvasWithAnimations(gridCanvas, gridBorder);
 		return;
 	}
 	
