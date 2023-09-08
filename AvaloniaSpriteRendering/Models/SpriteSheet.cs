@@ -39,7 +39,10 @@ namespace AvaloniaSpriteRendering.Models
 		{
 			return this._spriteList[index];
 		}
-
+		public int GetNumberTiles()
+		{
+			return _spriteList.Count;
+		}
 
 		/// <summary>
 		/// Cut spritesheet into bitmap animation frames

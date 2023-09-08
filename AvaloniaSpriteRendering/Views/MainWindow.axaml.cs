@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using AvaloniaSpriteRendering.Models;
@@ -18,49 +19,42 @@ public partial class MainWindow : Window
         InitializeComponent();
 		MainViewModel viewModel = new MainViewModel();
 		DataContext = viewModel;
-		viewModel.loadSprites();
-		viewModel.loadSpriteSheet(spriteRectangle, 32);
-		viewModel.loadSpriteSheet(spriteRectangle64, 32, 2);
-		//viewModel.loadSpriteSheet(spriteRectangle128, 32, 4);
+		
+		//load item sprites
+		viewModel.loadSingleSprites();
 
+		//load unit sprites
+		viewModel.loadSpriteAnimation(spriteRectangle32);
+		viewModel.loadSpriteAnimation(spriteRectangle64, 2);
+		viewModel.loadSpriteAnimation(spriteRectangle128, 4);
 
-		StackPanel rowTest = new StackPanel();
-		rowTest.Orientation = Avalonia.Layout.Orientation.Horizontal;
-		bunchOfDudes.Children.Add(rowTest);
-
-		makeSpriteCanvas(gridCanvas, gridBorder);
-		//makeMapCanvas(gridCanvas, gridBorder);
-
+		//load the sprite sheet
+		populateSpriteCanvas_Efficent(gridCanvas, gridBorder);
 		return;
-		for (int i = 0; i < 48; i++)
-		{
-			StackPanel row = new StackPanel();
-			row.Orientation = Avalonia.Layout.Orientation.Horizontal;
-			bunchOfDudes.Children.Add(row);
-			makeTenSprites(viewModel, row);
-		}
 	}
-	private void makeMapCanvas(Canvas canvas, Border border)
+	//Populate the grid with random tiles taken from the sprite sheet
+	private void populateSpriteCanvas_Efficent(Canvas canvas, Border border)
 	{
-		int rows = 32;
-		int cols = 48;
+		int rows = 10;
+		int cols = 10;
 		int widthHeight = 32;
 		int xStep = 0;
 		int yStep = 0;
 		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
 		//Bitmap tileSheetSourceZoom = tileSheetSource.CreateScaledBitmap(new PixelSize(64, 64), BitmapInterpolationMode.None);
-		//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+		SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+		Random rnd = new Random();
 
 		for (int i = 0; i < cols; i++)
 		{
 			for (int j = 0; j < rows; j++)
 			{
 				Avalonia.Controls.Image copy = new Avalonia.Controls.Image();
-				SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+				//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32); 
 
 				copy.Width = 32;
 				copy.Height = 32;
-				copy.Source = tileSheet.GetTile(34);
+				copy.Source = tileSheet.GetTile(rnd.Next(0, tileSheet.GetNumberTiles()));
 								
 				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
 				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
@@ -74,30 +68,28 @@ public partial class MainWindow : Window
 		canvas.Height = cols * widthHeight;
 		border.Width = rows * widthHeight;
 		border.Height = cols * widthHeight;
-		//result= 20mb
-
 	}
-	private void makeSpriteCanvas(Canvas canvas, Border border)
+	private void populateSpriteCanvas_InEfficent(Canvas canvas, Border border)
 	{
-		int rows = 32;
-		int cols = 48;
+		int rows = 10;
+		int cols = 10;
 		int widthHeight = 32;
 		int xStep = 0;
 		int yStep = 0;
 		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
 		//Bitmap tileSheetSourceZoom = tileSheetSource.CreateScaledBitmap(new PixelSize(64, 64), BitmapInterpolationMode.None);
-		//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+		Random rnd = new Random();
 
 		for (int i = 0; i < cols; i++)
 		{
 			for (int j = 0; j < rows; j++)
 			{
 				Avalonia.Controls.Image copy = new Avalonia.Controls.Image();
-				Sprite tileSheet = new Sprite(tileSheetSource,4, 32, 32);
+				SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32); 
 
 				copy.Width = 32;
 				copy.Height = 32;
-				copy = tileSheet.Brush;
+				copy.Source = tileSheet.GetTile(rnd.Next(0, tileSheet.GetNumberTiles()));
 
 				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
 				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
@@ -111,52 +103,5 @@ public partial class MainWindow : Window
 		canvas.Height = cols * widthHeight;
 		border.Width = rows * widthHeight;
 		border.Height = cols * widthHeight;
-		//result= 20mb
-
-	}
-	private void makeMapCanvasOld(MainViewModel viewModel, Canvas canvas, Border border)
-	{
-		//int rows = 32;
-		//int cols = 48;
-		//int widthHeight = 64;
-		//int xStep = 0;
-		//int yStep = 0;
-
-		//for (int i = 0; i < cols; i++)
-		//{
-		//	for (int j = 0; j < rows; j++)
-		//	{
-		//		Avalonia.Controls.Shapes.Rectangle rectangle = new Avalonia.Controls.Shapes.Rectangle();
-		//		Sprite sprite = viewModel.loadSpriteSheet(spriteRectangle, 32, widthHeight / 32);
-		//		rectangle.Fill = sprite.Brush;
-		//		rectangle.Width = widthHeight;
-		//		rectangle.Height = widthHeight;
-		//		//rectangle.MouseEnter += new MouseEventHandler(m_PaintManager.GridElementMouseOver);
-		//		//rectangle.MouseDown += new MouseButtonEventHandler(m_PaintManager.GridElementMouseOver);
-
-		//		Canvas.SetLeft(rectangle, 0 + (widthHeight * xStep));
-		//		Canvas.SetTop(rectangle, 0 + (widthHeight * yStep));
-		//		canvas.Children.Add(rectangle);
-		//		xStep++;
-		//	}
-		//	xStep = 0;
-		//	yStep++;
-		//}
-		//canvas.Width = rows * widthHeight;
-		//canvas.Height = cols * widthHeight;
-		//border.Width = rows * widthHeight;
-		//border.Height = cols * widthHeight;
-	}
-	private void makeTenSprites(MainViewModel viewModel, StackPanel stack)
-	{
-		for (int i = 0; i < 32; i++)
-		{
-			Sprite sprite = viewModel.loadSpriteSheet(spriteRectangle, 32, 1);
-			Border copy = new Border();
-			copy.Width = 32;
-			copy.Height = 32;
-			copy.Child = sprite.Brush;
-			stack.Children.Add(copy);
-		}
 	}
 }

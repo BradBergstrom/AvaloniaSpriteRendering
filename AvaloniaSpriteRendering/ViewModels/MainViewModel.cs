@@ -27,7 +27,7 @@ public partial class MainViewModel : ObservableObject
 	[ObservableProperty]
 	public Bitmap itemSprite64x64;
 
-	public void loadSprites()
+	public void loadSingleSprites()
 	{
 		try
 		{
@@ -44,14 +44,32 @@ public partial class MainViewModel : ObservableObject
 		}
 
 	}
-	public Sprite loadSpriteSheet(Rectangle rect, int frameSize, int scale =1 )
+	public Sprite loadSpriteAnimation(Rectangle rect, int scale = 1)
 	{
 		try
 		{
 			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
 			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
 
-			Sprite unitSprite = new Sprite(scaledSheet, 4, frameSize * scale, frameSize * scale);
+			Sprite unitSprite = new Sprite(scaledSheet, 4, 32 * scale, 32 * scale);
+			rect.Fill = unitSprite.Brush;
+			return unitSprite;
+		}
+		catch (Exception e)
+		{
+			Log.Fatal(e, "Exception caught in MainViewModel.loadSpriteSheet");
+		}
+		return null;
+	}
+	public Sprite loadSpriteSheet(Rectangle rect, int frameSize, int scale = 1)
+	{
+		try
+		{
+			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
+			Sprite unitSprite = new Sprite(spriteSheet, 4, frameSize * scale, frameSize * scale);
+
+			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
+
 			//rect.Fill = unitSprite.Brush;
 			//unitSprite.StartAnimation();
 			return unitSprite;
@@ -61,10 +79,5 @@ public partial class MainViewModel : ObservableObject
 			Log.Fatal(e, "Exception caught in MainViewModel.loadSpriteSheet");
 		}
 		return null;
-	}
-	public void loadSpriteButtonClicked()
-	{
-		Log.Information("loadSpriteButtonClicked");
-		loadSprites();
 	}
 }
