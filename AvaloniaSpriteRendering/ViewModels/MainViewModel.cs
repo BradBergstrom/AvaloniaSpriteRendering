@@ -61,23 +61,42 @@ public partial class MainViewModel : ObservableObject
 		}
 		return null;
 	}
-	public Sprite loadSpriteSheet(Rectangle rect, int frameSize, int scale = 1)
+	//Populate the grid with random tiles taken from the sprite sheet
+	public void populateSpriteCanvas(Canvas canvas, Border border)
 	{
-		try
-		{
-			Bitmap spriteSheet = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/blue_unit.png")));
-			Sprite unitSprite = new Sprite(spriteSheet, 4, frameSize * scale, frameSize * scale);
+		int rows = 10;
+		int cols = 10;
+		int widthHeight = 32;
+		int xStep = 0;
+		int yStep = 0;
+		Bitmap tileSheetSource = new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaSpriteRendering/Assets/Overworld.png")));
+		//Bitmap tileSheetSourceZoom = tileSheetSource.CreateScaledBitmap(new PixelSize(64, 64), BitmapInterpolationMode.None);
+		SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32);
+		Random rnd = new Random();
 
-			Bitmap scaledSheet = spriteSheet.CreateScaledBitmap(new PixelSize(spriteSheet.PixelSize.Width * scale, spriteSheet.PixelSize.Height * scale), BitmapInterpolationMode.None);
-
-			//rect.Fill = unitSprite.Brush;
-			//unitSprite.StartAnimation();
-			return unitSprite;
-		}
-		catch (Exception e)
+		for (int i = 0; i < cols; i++)
 		{
-			Log.Fatal(e, "Exception caught in MainViewModel.loadSpriteSheet");
+			for (int j = 0; j < rows; j++)
+			{
+				Avalonia.Controls.Image copy = new Avalonia.Controls.Image();
+				//Stress test by loading the entire spritesheet into memory for each tile.
+				//SpriteSheet tileSheet = new SpriteSheet(tileSheetSource, 32, 32); 
+
+				copy.Width = 32;
+				copy.Height = 32;
+				copy.Source = tileSheet.GetTile(rnd.Next(0, tileSheet.GetNumberTiles()));
+
+				Canvas.SetLeft(copy, 0 + (widthHeight * xStep));
+				Canvas.SetTop(copy, 0 + (widthHeight * yStep));
+				canvas.Children.Add(copy);
+				xStep++;
+			}
+			xStep = 0;
+			yStep++;
 		}
-		return null;
+		canvas.Width = rows * widthHeight;
+		canvas.Height = cols * widthHeight;
+		border.Width = rows * widthHeight + 2;
+		border.Height = cols * widthHeight + 2;
 	}
 }
