@@ -57,7 +57,7 @@
           </Border>
         </StackPanel>
       
-        <Label Classes="default" Content="Sprite Sheet animation by setting the SourceRect on an ImageBrush"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        <Label Classes="default" Content="Sprite sheet animation by setting the SourceRect on an ImageBrush"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
         <StackPanel Orientation = "Horizontal"  HorizontalAlignment="Center" Margin="5,5,0,0">
           <Border BorderBrush="Black" BorderThickness="1" Height="32" Width="32" Margin="5" Padding="0">
             <Rectangle x:Name="spriteRectangle32"  Width="32" Height="32"/>
@@ -69,6 +69,8 @@
             <Rectangle x:Name="spriteRectangle128"  Stretch="None" Width="128" Height="128"  />
           </Border>
         </StackPanel>
+        <Label Classes="default" Content="Sprite sheet rendered by cutting each sprite into a cropped bitmap and randomly choosing from the list"  HorizontalAlignment="Center" VerticalAlignment="Top"/>
+
         <Border  x:Name="gridBorder" BorderBrush="Black" BorderThickness="1" Height="320" Width="320" Margin="5" Padding="0">
           <Canvas x:Name="gridCanvas" Height="320" HorizontalAlignment="Left"  VerticalAlignment="Top" Width="320"  />
         </Border>

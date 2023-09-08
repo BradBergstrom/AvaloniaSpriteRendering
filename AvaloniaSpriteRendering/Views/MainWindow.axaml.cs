@@ -66,8 +66,8 @@ public partial class MainWindow : Window
 		}
 		canvas.Width = rows * widthHeight;
 		canvas.Height = cols * widthHeight;
-		border.Width = rows * widthHeight;
-		border.Height = cols * widthHeight;
+		border.Width = rows * widthHeight + 2;
+		border.Height = cols * widthHeight + 2;
 	}
 	private void populateSpriteCanvas_InEfficent(Canvas canvas, Border border)
 	{
@@ -101,7 +101,7 @@ public partial class MainWindow : Window
 		}
 		canvas.Width = rows * widthHeight;
 		canvas.Height = cols * widthHeight;
-		border.Width = rows * widthHeight;
-		border.Height = cols * widthHeight;
+		border.Width = rows * widthHeight + 2;
+		border.Height = cols * widthHeight + 2;
 	}
 }
